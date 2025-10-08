@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # FAQ Bot API
+  faq-bot:
+    build: .
+    container_name: faq-bot
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      # LLM Configuration
+      - OLLAMA_ENDPOINT=${OLLAMA_ENDPOINT:-http://host.docker.internal:11434}
+      - MODEL_NAME=${MODEL_NAME:-qwen2.5:3b-instruct}
+      - TEMPERATURE=${TEMPERATURE:-0.0}
+      - MAX_TOKENS=${MAX_TOKENS:-384}
+
+      # Retrieval Configuration
+      - TOP_K=${TOP_K:-4}
+      - SIMILARITY_THRESHOLD=${SIMILARITY_THRESHOLD:-0.75}
+      - EMBED_MODEL=${EMBED_MODEL:-all-MiniLM-L6-v2}
+
+      # API Configuration
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+
+      # CORS
+      - ENABLE_CORS=${ENABLE_CORS:-true}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    volumes:
+      # Mount corpus as read-only for safety
+      - ./corpus:/app/corpus:ro
+
+      # Persist vector store data
+      - chroma-data:/app/.chroma
+    restart: unless-stopped
+    networks:
+      - faq-network
+
+  # Optional: Ollama service (uncomment to run Ollama in Docker)
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama-data:/root/.ollama
+  #   restart: unless-stopped
+  #   networks:
+  #     - faq-network
+
+volumes:
+  chroma-data:
+    driver: local
+  # ollama-data:
+  #   driver: local
+
+networks:
+  faq-network:
+    driver: bridge

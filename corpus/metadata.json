@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-10-08T00:00:00Z",
+  "document_count": 3,
+  "content_hash": "",
+  "tags": ["faq", "pricing", "features"],
+  "description": "Initial FAQ corpus for chatbot",
+  "maintainer": "AI Whisperers"
+}

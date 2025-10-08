@@ -1,0 +1,17 @@
+{
+  "public": {
+    "description": "Anonymous public users",
+    "allowed_tags": ["faq", "pricing", "features"],
+    "deny": ["internal", "pii", "support"]
+  },
+  "support": {
+    "description": "Customer support team members",
+    "allowed_tags": ["faq", "pricing", "features", "support"],
+    "deny": ["internal", "pii"]
+  },
+  "admin": {
+    "description": "Administrative users with full access",
+    "allowed_tags": ["faq", "pricing", "features", "support", "internal"],
+    "deny": ["pii"]
+  }
+}
