@@ -11,6 +11,9 @@ sentence-transformers==2.2.2
 # HTTP client for LLM calls
 httpx==0.25.2
 
+# Security
+slowapi==0.1.9
+
 # Development and testing
 pytest==7.4.3
 pytest-asyncio==0.21.1

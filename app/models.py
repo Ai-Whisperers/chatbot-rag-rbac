@@ -5,13 +5,19 @@ Clean, validated data structures for requests and responses.
 
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field, field_validator
+from app.config import MAX_QUESTION_LENGTH, MAX_DOCUMENT_LENGTH
 
 
 class UpsertDocument(BaseModel):
     """Request model for upserting a document into the corpus."""
 
     id: str = Field(..., description="Unique document identifier")
-    text: str = Field(..., min_length=1, description="Document content")
+    text: str = Field(
+        ...,
+        min_length=1,
+        max_length=MAX_DOCUMENT_LENGTH,
+        description=f"Document content (max {MAX_DOCUMENT_LENGTH} characters)"
+    )
     tags: List[str] = Field(default=["faq"], description="Access control tags")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
@@ -27,7 +33,12 @@ class UpsertDocument(BaseModel):
 class AskQuestion(BaseModel):
     """Request model for asking a question."""
 
-    question: str = Field(..., min_length=1, description="User's question")
+    question: str = Field(
+        ...,
+        min_length=1,
+        max_length=MAX_QUESTION_LENGTH,
+        description=f"User's question (max {MAX_QUESTION_LENGTH} characters)"
+    )
     scope: str = Field(default="public", description="RBAC scope (public, support, admin)")
     user_id: Optional[str] = Field(default="anonymous", description="User identifier for logging")
 

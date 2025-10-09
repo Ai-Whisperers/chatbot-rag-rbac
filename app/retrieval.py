@@ -145,18 +145,24 @@ class VectorStore:
     @staticmethod
     def distance_to_similarity(distance: float) -> float:
         """
-        Convert Chroma distance to similarity score.
-        Chroma uses L2 distance, smaller = more similar.
+        Convert Chroma cosine distance to similarity score.
+
+        ChromaDB with cosine metric returns distance in range [0, 2]:
+        - 0 = identical vectors (similarity = 1.0)
+        - 1 = orthogonal vectors (similarity = 0.5)
+        - 2 = opposite vectors (similarity = 0.0)
+
+        Formula: similarity = 1.0 - (distance / 2.0)
+        Maps [0, 2] → [1.0, 0.0]
 
         Args:
-            distance: L2 distance from Chroma
+            distance: Cosine distance from ChromaDB
 
         Returns:
-            Similarity score between 0 and 1
+            Similarity score between 0.0 and 1.0
         """
-        # Simple conversion: similarity = 1 / (1 + distance)
-        # This maps distance [0, inf) to similarity [1, 0)
-        return 1.0 / (1.0 + distance)
+        # Correct formula for cosine distance
+        return 1.0 - (distance / 2.0)
 
 
 # Singleton instance

@@ -35,6 +35,10 @@ EMBEDDING_CACHE_SIZE = int(os.getenv("EMBEDDING_CACHE_SIZE", "1000"))
 TOP_K = int(os.getenv("TOP_K", "4"))
 SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.75"))
 
+# ==================== INPUT VALIDATION CONFIG ====================
+MAX_QUESTION_LENGTH = int(os.getenv("MAX_QUESTION_LENGTH", "500"))
+MAX_DOCUMENT_LENGTH = int(os.getenv("MAX_DOCUMENT_LENGTH", "10000"))
+
 # ==================== VECTOR STORE CONFIG ====================
 VECTOR_STORE_TYPE = os.getenv("VECTOR_STORE_TYPE", "chroma")  # chroma | qdrant
 CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", str(PROJECT_ROOT / ".chroma"))
@@ -46,8 +50,23 @@ API_PORT = int(os.getenv("API_PORT", "8000"))
 API_WORKERS = int(os.getenv("API_WORKERS", "1"))
 
 # ==================== SECURITY CONFIG ====================
+# Authentication
+REQUIRE_AUTH = os.getenv("REQUIRE_AUTH", "false").lower() == "true"
+
+# Rate Limiting
+ENABLE_RATE_LIMIT = os.getenv("ENABLE_RATE_LIMIT", "true").lower() == "true"
+RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", "10"))
+
+# CORS
 ENABLE_CORS = os.getenv("ENABLE_CORS", "true").lower() == "true"
-CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
+# Default to localhost only for security - override in production
+CORS_ORIGINS_RAW = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:8080")
+CORS_ORIGINS = [origin.strip() for origin in CORS_ORIGINS_RAW.split(",") if origin.strip()]
+
+# Warn if wildcard CORS is enabled
+if "*" in CORS_ORIGINS:
+    import sys
+    print("⚠️  WARNING: CORS allows all origins (*) - this is insecure for production!", file=sys.stderr)
 
 # ==================== LOGGING ====================
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

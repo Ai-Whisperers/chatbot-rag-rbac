@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "user_id": "test_user",
+      "scopes": [
+        "public"
+      ],
+      "api_key_hash": "4be170f80a074d58a08cc82c2896119f23e84c6f3345384a738e944005e3f566"
+    },
+    {
+      "user_id": "test_user",
+      "scopes": [
+        "public"
+      ],
+      "api_key_hash": "c70b3730e2bd9b01c49d2271f5b4e04f6400d6c6341880a2193c071e6bbdb2bf"
+    },
+    {
+      "user_id": "test_user",
+      "scopes": [
+        "public"
+      ],
+      "api_key_hash": "2b3f6556a91acd3fd4abb0205d22a37559f8db84cec30b2623aca6002b5c3610"
+    }
+  ]
+}
